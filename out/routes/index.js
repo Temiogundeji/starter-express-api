@@ -1,0 +1,26 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const user_1 = __importDefault(require("./user"));
+const auth_1 = __importDefault(require("./auth"));
+const wallet_1 = __importDefault(require("./wallet"));
+const transaction_1 = __importDefault(require("./transaction"));
+const webhook_1 = __importDefault(require("./webhook"));
+const post_1 = __importDefault(require("./post"));
+const account_1 = __importDefault(require("./account"));
+const chat_1 = __importDefault(require("./chat"));
+const middlewares_1 = require("../middlewares");
+const { authenticate } = middlewares_1.Authentications;
+const router = (0, express_1.Router)();
+router.use('/auth', auth_1.default);
+router.use('/users', authenticate, user_1.default);
+router.use('/wallets', authenticate, wallet_1.default);
+router.use('/transactions', authenticate, transaction_1.default);
+router.use('/posts', authenticate, post_1.default);
+router.use('/payment', webhook_1.default);
+router.use('/accounts', account_1.default);
+router.use('/chats', authenticate, chat_1.default);
+exports.default = router;
