@@ -69,7 +69,7 @@ async function signup(req: Request, res: Response) {
     }
     await newUser.save();
     const accessToken = generateAccessToken(email, false)
-    const redirectUrl = `${req.protocol}://${req.get("host")}/users/verify?token=${accessToken}`
+    const redirectUrl = `${req.protocol}://${req.get("host")}/mcics/api/v1/auth/verify?token=${accessToken}`
 
     await mailer(
       req.body.email,
