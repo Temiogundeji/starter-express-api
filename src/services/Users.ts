@@ -34,6 +34,7 @@ class UserService {
     async getUserByEmail(email: string) {
         try {
             const user = User.findOne({ email });
+            console.log(user);
             if (!user) throw new Error('User not found');
             return user;
         } catch (error) {

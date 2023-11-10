@@ -51,20 +51,22 @@ async function signup(req: Request, res: Response) {
       }
     );
 
-    await Wallet.create({ userId: newUser._id });
+    const newUserObj = newUser.toObject();
+
+    await Wallet.create({ userId: newUserObj._id });
+
 
     if (req.body.roles && req.body.roles.length > 0) {
       const roles = await auth.Role.find({
         name: { $in: req.body.roles },
       });
 
-      newUser.roles = roles.map((role: any) => role.id);
+      newUser.roles = roles.map((role: any) => role._id);
     } else {
       const defaultRole = await auth.Role.findOne({ name: "user" });
       newUser.roles = [defaultRole.id];
       await newUser.save();
     }
-
     await newUser.save();
     const accessToken = generateAccessToken(email, false)
     const redirectUrl = `${req.protocol}s://${req.get("host")}/users/verify?token=${accessToken}`

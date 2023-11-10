@@ -70,29 +70,46 @@ mongoose
         process.exit(1);
     });
 
-function initialize() {
-    Role.estimatedDocumentCount({})
-        .then((count: number) => {
-            // Use the count
-            if (count <= 1) {
-                new Role({
-                    name: "user",
-                }).save();
 
-                new Role({
-                    name: "moderator",
-                }).save();
+async function initialize() {
+    const rolesToCreate = ['admin', 'user', 'guest'];
 
-                new Role({
-                    name: "admin",
-                }).save();
-            }
-        })
-        .catch((err: Error) => {
-            // Handle the error
-            throw new Error(err.message);
-        });
+    for (const roleName of rolesToCreate) {
+        const existingRole = await Role.findOne({ name: roleName });
+
+        if (!existingRole) {
+            // Role doesn't exist, create it
+            await Role.create({ name: roleName });
+            console.log(`Role '${roleName}' created.`);
+        } else {
+            console.log(`Role '${roleName}' already exists.`);
+        }
+    }
 }
+
+// function initialize() {
+//     Role.estimatedDocumentCount({})
+//         .then((count: number) => {
+//             // Use the count
+//             if (count <= 1) {
+//                 new Role({
+//                     name: "user",
+//                 }).save();
+
+//                 new Role({
+//                     name: "moderator",
+//                 }).save();
+
+//                 new Role({
+//                     name: "admin",
+//                 }).save();
+//             }
+//         })
+//         .catch((err: Error) => {
+//             // Handle the error
+//             throw new Error(err.message);
+//         });
+// }
 
 
 
