@@ -8,8 +8,8 @@ import log from "../../config/logger";
 async function saveMoney(req: Request, res: Response) {
     const { amount, description, type } = req.body;
     try {
-        const user = req.user;
-        console.log(user, "USER")
+        let user = req.user;
+        console.log("USER NOT FOUND", user?.toObject(), "USER")
         if (!user) {
             return apiResponse(
                 res,
@@ -19,6 +19,7 @@ async function saveMoney(req: Request, res: Response) {
                 "User not found"
             )
         }
+        user = user?.toObject();
         const savingsRes = await WalletService.save(user, amount, description, type);
         console.log(savingsRes, "SAVINGS RESPONSE HERE");
         log("SAVINGS RESPONSE", savingsRes);
