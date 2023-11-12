@@ -9,6 +9,7 @@ async function saveMoney(req: Request, res: Response) {
     const { amount, description, type } = req.body;
     try {
         const user = req.user;
+        console.log(user, "USER")
         if (!user) {
             return apiResponse(
                 res,
