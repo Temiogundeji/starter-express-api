@@ -36,6 +36,7 @@ class UserService {
     async getUserByEmail(email) {
         try {
             const user = User_1.default.findOne({ email });
+            console.log(user);
             if (!user)
                 throw new Error('User not found');
             return user;

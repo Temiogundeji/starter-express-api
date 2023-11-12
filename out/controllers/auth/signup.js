@@ -40,12 +40,13 @@ async function signup(req, res) {
             accountNumber: accountNumber,
             staffType: staffType,
         });
-        await Wallet_1.default.create({ userId: newUser._id });
+        const newUserObj = newUser.toObject();
+        await Wallet_1.default.create({ userId: newUserObj._id });
         if (req.body.roles && req.body.roles.length > 0) {
             const roles = await auth_1.default.Role.find({
                 name: { $in: req.body.roles },
             });
-            newUser.roles = roles.map((role) => role.id);
+            newUser.roles = roles.map((role) => role._id);
         }
         else {
             const defaultRole = await auth_1.default.Role.findOne({ name: "user" });
@@ -54,7 +55,7 @@ async function signup(req, res) {
         }
         await newUser.save();
         const accessToken = (0, helpers_1.generateAccessToken)(email, false);
-        const redirectUrl = `${req.protocol}s://${req.get("host")}/users/verify?token=${accessToken}`;
+        const redirectUrl = `${req.protocol}://${req.get("host")}/mcics/api/v1/auth/verify?token=${accessToken}`;
         await (0, mailer_1.default)(req.body.email, 'Verify your Muslim Community Cooperative Account', signUpHTML.replace('{{NAME}}', `${firstName}`).replace('{{LINK}}', redirectUrl));
         (0, config_2.logger)('redirect url', redirectUrl);
         return apiResponse(res, _types_1.ResponseType.SUCCESS, _types_1.StatusCode.OK, _types_1.ResponseCode.SUCCESS, 'Registration successful.');

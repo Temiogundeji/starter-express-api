@@ -11,10 +11,11 @@ const logger_1 = __importDefault(require("../../config/logger"));
 async function saveMoney(req, res) {
     const { amount, description, type } = req.body;
     try {
-        const user = req.user;
+        let user = req.user;
         if (!user) {
             return apiResponse(res, _types_1.ResponseType.FAILURE, _types_1.StatusCode.NOT_FOUND, _types_1.ResponseCode.FAILURE, "User not found");
         }
+        user = user?.toObject();
         const savingsRes = await Wallets_1.default.save(user, amount, description, type);
         console.log(savingsRes, "SAVINGS RESPONSE HERE");
         (0, logger_1.default)("SAVINGS RESPONSE", savingsRes);

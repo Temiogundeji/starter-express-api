@@ -27,6 +27,7 @@ class WalletService {
             }
             //Check if the email of the user passed in is the same as
             //the email in the database
+            console.log(user.email, "USER EMAIL");
             const appUser = await Users_1.default.getUserByEmail(user.email);
             // Validate savings amount
             if (Number(amount) < 5000) {

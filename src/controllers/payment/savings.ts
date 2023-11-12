@@ -9,7 +9,6 @@ async function saveMoney(req: Request, res: Response) {
     const { amount, description, type } = req.body;
     try {
         let user = req.user;
-        console.log("USER NOT FOUND", user?.toObject(), "USER")
         if (!user) {
             return apiResponse(
                 res,
