@@ -142,7 +142,7 @@ async function login(req: Request, res: Response) {
         const accessToken = generateAccessToken(req.body.email, false);
         const refreshToken = await RefreshToken.createToken(user);
 
-        const authorities = user.roles.map(
+        const authorities = user?.userRoles.map(
             (role: any) => "ROLE_" + role.name?.toUpperCase()
         );
         const { password, id, userRoles, ...rest } = user;
