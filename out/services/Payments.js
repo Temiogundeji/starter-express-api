@@ -10,11 +10,11 @@ const crypto_1 = require("crypto");
 const logger_1 = __importDefault(require("../config/logger"));
 // import { ObjectId } from "mongodb";
 class Payment {
-    async initialize(user, paymentBody, metaObj, type) {
+    async initialize(user, paymentBody, metaObj) {
         try {
             let appUser = user;
             const { amount } = paymentBody;
-            let meta = { ...metaObj, userId: user?._id.toString(), type };
+            let meta = { ...metaObj, userId: user?._id.toString() };
             const { body: { data, status }, } = await superagent_1.default
                 .post(`https://api.paystack.co/transaction/initialize`)
                 .set('Authorization', `Bearer ${process.env.PAYSTACK_SECRET_KEY_TEST}`)

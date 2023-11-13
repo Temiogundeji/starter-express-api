@@ -18,23 +18,24 @@ class WalletService {
 
             const metaObj: Object = {
                 amount,
+                type: activityType,
                 description,
             }
+
+            console.log("META INFORMATION", metaObj);
             // Check if user account is activated and user is logged in, check if user has an account
             if (!user.isActive) {
                 throw new Error("Account not active");
             }
             //Check if the email of the user passed in is the same as
             //the email in the database
-
-            console.log(user.email, "USER EMAIL")
             const appUser: any = await UserService.getUserByEmail(user.email as string);
             // Validate savings amount
             if (Number(amount) < 5000) {
                 throw new Error("Amount must be a minimum of 5000");
             }
             // Make payment
-            const responseData: any = await Payments.initialize(appUser, paymentObj, metaObj, activityType);
+            const responseData: any = await Payments.initialize(appUser, paymentObj, metaObj);
             return responseData;
 
         }

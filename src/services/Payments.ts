@@ -9,11 +9,11 @@ import { IWithdraw } from "../@types/withdraw";
 // import { ObjectId } from "mongodb";
 
 class Payment {
-    async initialize(user: IUser, paymentBody: any, metaObj: Object, type: string) {
+    async initialize(user: IUser, paymentBody: any, metaObj: Object) {
         try {
             let appUser = user;
             const { amount } = paymentBody;
-            let meta = { ...metaObj, userId: user?._id.toString(), type }
+            let meta = { ...metaObj, userId: user?._id.toString() }
             const {
                 body: { data, status },
             } = await superagent

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import crypto from "crypto";
-import mongoose, { ObjectId } from "mongoose";
+import { ObjectId } from "mongodb";
 import { ResponseCode, ResponseType, StatusCode } from '../../@types';
 import { Toolbox } from '../../utils';
 import Wallet from '../../models/Wallet';
@@ -26,15 +26,17 @@ const payStackWebHook = async (req: Request, res: Response) => {
             const { event, data } = req.body;
             switch (event) {
                 case "charge.success":
-                    console.log(data.metadata?.userId, "User ID is here");
+                    console.log(data, "Payment Response Data Here");
                     //Update wallet to reflect new user savings
                     const updatedWallet = await Wallet.findOneAndUpdate(
-                        { userId: data.metadata?.userId },
+                        { userId: new ObjectId(data.metadata?.userId) },
                         { $inc: { balance: Number(data.metadata?.amount) } },
                         { new: true }
                     );
+
+                    console.log(updatedWallet, "UPDATED WALLET HERE")
                     // Create new transaction
-                    await Transactions.createTransaction({
+                    const newTransaction = await Transactions.createTransaction({
                         walletId: updatedWallet._id,
                         payment_ref: data?.reference,
                         amount: data.metadata?.amount,
@@ -42,6 +44,8 @@ const payStackWebHook = async (req: Request, res: Response) => {
                         type: data.metadata?.type,
                         status: data.status
                     });
+
+                    console.log("NEW TRANSACTION", newTransaction)
 
                     const user = await User.findOne({ email: data.customer?.email });
 

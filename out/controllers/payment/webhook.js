@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const crypto_1 = __importDefault(require("crypto"));
+const mongodb_1 = require("mongodb");
 const _types_1 = require("../../@types");
 const utils_1 = require("../../utils");
 const Wallet_1 = __importDefault(require("../../models/Wallet"));
@@ -23,11 +24,12 @@ const payStackWebHook = async (req, res) => {
             const { event, data } = req.body;
             switch (event) {
                 case "charge.success":
-                    console.log(data.metadata?.userId, "User ID is here");
+                    console.log(data, "Payment Response Data Here");
                     //Update wallet to reflect new user savings
-                    const updatedWallet = await Wallet_1.default.findOneAndUpdate({ userId: data.metadata?.userId }, { $inc: { balance: Number(data.metadata?.amount) } }, { new: true });
+                    const updatedWallet = await Wallet_1.default.findOneAndUpdate({ userId: new mongodb_1.ObjectId(data.metadata?.userId) }, { $inc: { balance: Number(data.metadata?.amount) } }, { new: true });
+                    console.log(updatedWallet, "UPDATED WALLET HERE");
                     // Create new transaction
-                    await Transactions_1.default.createTransaction({
+                    const newTransaction = await Transactions_1.default.createTransaction({
                         walletId: updatedWallet._id,
                         payment_ref: data?.reference,
                         amount: data.metadata?.amount,
@@ -35,6 +37,7 @@ const payStackWebHook = async (req, res) => {
                         type: data.metadata?.type,
                         status: data.status
                     });
+                    console.log("NEW TRANSACTION", newTransaction);
                     const user = await models_1.User.findOne({ email: data.customer?.email });
                     if (data.metadata?.type === "savings") {
                         await (0, mailer_1.default)(data.customer?.email, 'Congratulations!!! Your payment has been successful 🎉', savingsHTML.replace(`{{NAME}}`, `${user?.firstName}`)

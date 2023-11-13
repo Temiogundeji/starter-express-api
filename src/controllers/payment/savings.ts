@@ -19,7 +19,7 @@ async function saveMoney(req: Request, res: Response) {
             )
         }
         user = user?.toObject();
-        const savingsRes = await WalletService.save(user, amount, description, type);
+        const savingsRes = await WalletService.save(user, amount, type, description);
         console.log(savingsRes, "SAVINGS RESPONSE HERE");
         log("SAVINGS RESPONSE", savingsRes);
 

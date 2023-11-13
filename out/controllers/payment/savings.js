@@ -16,7 +16,7 @@ async function saveMoney(req, res) {
             return apiResponse(res, _types_1.ResponseType.FAILURE, _types_1.StatusCode.NOT_FOUND, _types_1.ResponseCode.FAILURE, "User not found");
         }
         user = user?.toObject();
-        const savingsRes = await Wallets_1.default.save(user, amount, description, type);
+        const savingsRes = await Wallets_1.default.save(user, amount, type, description);
         console.log(savingsRes, "SAVINGS RESPONSE HERE");
         (0, logger_1.default)("SAVINGS RESPONSE", savingsRes);
         return apiResponse(res, _types_1.ResponseType.SUCCESS, _types_1.StatusCode.OK, _types_1.ResponseCode.SUCCESS, {

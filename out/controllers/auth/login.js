@@ -101,7 +101,7 @@ async function login(req, res) {
         }
         const accessToken = (0, helpers_1.generateAccessToken)(req.body.email, false);
         const refreshToken = await RefreshToken_1.default.createToken(user);
-        const authorities = user.userRoles.map((role) => "ROLE_" + role.name?.toUpperCase());
+        const authorities = user.roles.map((role) => "ROLE_" + role.name?.toUpperCase());
         const { password, id, userRoles, ...rest } = user;
         return apiResponse(res, _types_1.ResponseType.SUCCESS, _types_1.StatusCode.OK, _types_1.ResponseCode.SUCCESS, {
             ...rest,
