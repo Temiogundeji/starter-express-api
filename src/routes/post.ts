@@ -5,5 +5,6 @@ import PostMiddleware from '../middlewares/post';
 const router = express.Router();
 
 router.post("/", PostMiddleware.inspectPost, PostController.postArticle);
+router.get("/", PostMiddleware.inspectPost, PostController.getPosts)
 
 export default router;

@@ -1,7 +1,9 @@
 import postArticle from "./postArticle";
+import getPosts from "./getPosts";
 
 const PostController = {
-    postArticle
+    postArticle,
+    getPosts
 };
 
 export default PostController;

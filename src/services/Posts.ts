@@ -9,6 +9,7 @@ class PostService {
     async createPost(postObj: IPost) {
         try {
             const post = await Post.create(postObj);
+            console.log(post, "POST HERE");
             return post;
         }
         catch (error) {
@@ -19,14 +20,15 @@ class PostService {
             );
         }
     }
-    async getPosts(id: ObjectId) {
+    async getPosts() {
         try {
-            const posts = await Post.findAll();
+            const posts = await Post.find();
+            console.log(posts, "POSTS HERE")
             return posts;
         } catch (error) {
             throw new AppError({
                 httpCode: HttpCode.INTERNAL_SERVER_ERROR,
-                description: "Error creating post"
+                description: "Error fetching post"
             }
             );
         }
@@ -45,16 +47,19 @@ class PostService {
             );
         }
     }
-    async getAPostByTitle(title:string) {
+    async getAPostByTitle(title: string) {
         try {
             const post = await Post.find({ title });
-            log(`Transaction for ${title}`, post);
+            console.log(post, "SOME")
+            if (!post) {
+                throw new Error("No post found")
+            }
             return post;
         }
         catch (error) {
             throw new AppError({
                 httpCode: HttpCode.INTERNAL_SERVER_ERROR,
-                description: "Error creating user"
+                description: "Error creating post"
             }
             );
         }

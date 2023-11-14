@@ -29,18 +29,20 @@ async function postArticle(req: Request, res: Response) {
             );
         }
 
-        const isPostExist = await Posts.getAPostByTitle(title);
-        if (isPostExist) {
-            return apiResponse(
-                res,
-                ResponseType.FAILURE,
-                StatusCode.BAD_REQUEST,
-                ResponseCode.FAILURE,
-                "Post already exist"
-            );
-        }
+        // const isPostExist = await Posts.getAPostByTitle(title);
+        // console.log(isPostExist, "IS POST EXIST")
+        // if (isPostExist) {
+        //     return apiResponse(
+        //         res,
+        //         ResponseType.FAILURE,
+        //         StatusCode.BAD_REQUEST,
+        //         ResponseCode.FAILURE,
+        //         "Post already exist"
+        //     );
+        // }
 
         const newPost = await Posts.createPost({ author, title, body });
+
         const users = await User.find();
 
         await Promise.allSettled(
