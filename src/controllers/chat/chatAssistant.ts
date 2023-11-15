@@ -6,8 +6,8 @@ import Chat from "../../services/Chat";
 const { apiResponse } = Toolbox;
 
 async function ChatAssistant(req: Request, res: Response) {
-    const { content } = req.body;
-    if (!content) {
+    const { queryText } = req.body;
+    if (!queryText) {
         throw new Error("Content is required");
     }
     try {
@@ -22,7 +22,7 @@ async function ChatAssistant(req: Request, res: Response) {
             );
         }
 
-        const chatResponse = await Chat(content);
+        const chatResponse = await Chat(queryText);
 
         return apiResponse(res, ResponseType.SUCCESS, StatusCode.OK, ResponseCode.SUCCESS, {
             chatResponse

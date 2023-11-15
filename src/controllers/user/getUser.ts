@@ -5,7 +5,7 @@ import { Users } from '../../services';
 
 const { apiResponse } = Toolbox;
 
-async function purchase(req: Request, res: Response) {
+async function getUser(req: Request, res: Response) {
   try {
     const appUser = req.user as any;
     const userDetails: any = await Users.getUserById(appUser._id);
@@ -28,4 +28,4 @@ async function purchase(req: Request, res: Response) {
   }
 }
 
-export default purchase;
+export default getUser;
