@@ -13,7 +13,7 @@ async function ChatAssistant(req: Request, res: Response) {
     try {
         const user = req.user;
         if (!user) {
-            return apiResponse(
+            return apiResponse( 
                 res,
                 ResponseType.FAILURE,
                 StatusCode.NOT_FOUND,
